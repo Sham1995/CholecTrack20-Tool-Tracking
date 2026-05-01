@@ -1,70 +1,82 @@
-\# Surgical Tool Detection and Tracking (CholecTrack20)
+# Surgical Tool Detection and Tracking (CholecTrack20)
 
+## Overview
+This project implements a complete pipeline for detecting and tracking surgical tools using the CholecTrack20 dataset and YOLOv8.
 
+The workflow includes:
+- Dataset preparation
+- Annotation conversion (JSON → YOLO format)
+- Model training
+- Detection
+- Tracking
 
-\## Overview
+## Pipeline
+CholecTrack20 Dataset → JSON Annotations → YOLO Format → Training → Detection → Tracking
 
-This project implements a pipeline for surgical tool detection and tracking using the CholecTrack20 dataset.
+## Repository Structure
+scripts/        # Python scripts for preprocessing  
+results/        # Training outputs and evaluation results  
+screenshots/    # Evidence for report  
+data.yaml       # YOLO dataset configuration  
+requirements.txt  
+README.md  
 
+## Setup Instructions
 
+### 1. Clone Repository
+git clone https://github.com/YOUR_USERNAME/CholecTrack20-Tool-Tracking.git  
+cd CholecTrack20-Tool-Tracking  
 
-\## Pipeline
+### 2. Install Dependencies
+pip install -r requirements.txt  
 
-Dataset → JSON → YOLO → Training → Detection → Tracking
+### 3. Download Dataset
+Download the CholecTrack20 dataset from:  
+https://www.synapse.org/Synapse:syn53182642/wiki/628404  
 
+Place it inside:  
+datasets/CholecTrack20/  
 
+## Running the Pipeline
 
-\## Steps to Run
+### Step 1: Convert JSON Annotations to YOLO Format
+python scripts/convert_to_yolo.py  
 
+### Step 2: Prepare Dataset (Images + Labels)
+python scripts/prepare_dataset.py  
 
+This creates:  
+datasets/cholec_yolo/images/train/  
+datasets/cholec_yolo/images/val/  
+datasets/cholec_yolo/labels/train/  
+datasets/cholec_yolo/labels/val/  
 
-\### 1. Download Dataset
+### Step 3: Train YOLO Model
+yolo detect train data=data.yaml model=yolov8n.pt epochs=10 imgsz=640  
 
-Run:
+Output saved to:  
+runs/detect/train-*/  
 
-python scripts/download\_cholec.py
+### Step 4: Run Detection
+yolo detect predict model=runs/detect/train-*/weights/best.pt source=PATH_TO_IMAGES  
 
+### Step 5: Run Tracking
+yolo track model=runs/detect/train-*/weights/best.pt source=PATH_TO_FRAMES imgsz=640  
 
+Tracking results saved to:  
+runs/detect/track-*/  
 
-\### 2. Convert Annotations to YOLO Format
+## Results
+- Model successfully detects surgical tools in laparoscopic images  
+- Tracking applied across video frames  
+- Output includes bounding boxes and trajectories  
 
-python scripts/convert\_to\_yolo.py
+Sample outputs are available in the results/ and screenshots/ folders.
 
+## Important Notes
+- The dataset is NOT included due to size (~35GB) and licensing restrictions  
+- Make sure dataset paths match data.yaml  
+- Training was performed using YOLOv8  
 
-
-\### 3. Prepare Dataset
-
-python scripts/prepare\_dataset.py
-
-
-
-\### 4. Train YOLO Model
-
-yolo detect train data=data.yaml model=yolov8n.pt epochs=10 imgsz=640
-
-
-
-\### 5. Run Tracking
-
-yolo track model=runs/detect/train/weights/best.pt source=path\_to\_frames conf=0.01
-
-
-
-\## Results
-
-The model successfully detects and tracks surgical tools across video frames.
-
-
-
-\## Notes
-
-\- Dataset is not included due to size and licensing restrictions.
-
-\- Results are stored in the `runs/` directory.
-
-
-
-\## Author
-
+## Author
 Shamsa
-
