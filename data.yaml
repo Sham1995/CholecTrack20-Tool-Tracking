@@ -1,0 +1,6 @@
+train: C:/Users/shamsa/Desktop/StrongSORT/datasets/cholec_yolo/images/train
+val: C:/Users/shamsa/Desktop/StrongSORT/datasets/cholec_yolo/images/train
+
+nc: 1
+
+names: ["tool"]

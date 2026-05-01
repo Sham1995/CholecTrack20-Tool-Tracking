@@ -1,0 +1,12 @@
+ultralytics
+opencv-python
+numpy
+tqdm
+synapseclient
+synapseutils
+requests
+scikit-learn
+matplotlib
+torch
+torchvision
+torchaudio
